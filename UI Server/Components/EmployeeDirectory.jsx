@@ -1,7 +1,7 @@
 import React from "react";
 import EmployeeSearch from "./EmployeeSearch.jsx";
 import EmployeeTable from "./EmployeeTable.jsx";
-
+import { Container } from "react-bootstrap";
 // Parent component
 class EmployeeDirectory extends React.Component {
   constructor(props) {
@@ -53,14 +53,14 @@ class EmployeeDirectory extends React.Component {
 
   render() {
     return (
-      <div>
+      <Container className="mt-4">
         <h2>Employee List</h2>
         <hr />
         <EmployeeTable
           employees={this.state.employees}
           onDelete={this.deleteEmployee}
         />
-      </div>
+      </Container>
     );
   }
 }

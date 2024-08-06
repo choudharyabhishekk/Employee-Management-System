@@ -39,9 +39,11 @@ async function addDbEmployee(employee) {
         { upsert: true, returnDocument: "after" }
       );
 
-      const employeeId = await db.collection("counters").findOne({ _id: "employee" });
-      const getNewId = employeeId.current;
-      console.log(getNewId);
+    const employeeId = await db
+      .collection("counters")
+      .findOne({ _id: "employee" });
+    const getNewId = employeeId.current;
+    console.log(getNewId);
 
     const newEmployee = { id: getNewId, ...employee };
     employees.insertOne(newEmployee);
@@ -71,6 +73,17 @@ async function updateDbEmployee(id, updates) {
 }
 
 async function deleteDbEmployee(id) {
+  // Fetch the employee to check the currentStatus
+  const employee = await db.collection("employees").findOne({ id });
+
+  if (!employee) {
+    throw new Error("Employee not found");
+  }
+
+  // Check if the currentStatus is 1
+  if (employee.currentStatus === 1) {
+    throw new Error("Can't delete Employee- Status Active");
+  }
   const result = await db.collection("employees").deleteOne({ id });
   return true;
 }

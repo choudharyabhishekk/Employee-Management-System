@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import EmployeeTable from "./EmployeeTable.jsx";
+import { Form, Container } from "react-bootstrap";
 
 const searchQuery = `
   query searchEmployees($employeeType: String) {
@@ -86,12 +87,12 @@ class EmployeeSearchWrapper extends Component {
     const { results, employeeType } = this.state;
 
     return (
-      <div>
-        <form>
-          <div>
-            <label htmlFor="employeeTypes">Employee Type</label>
-            <select
-              id="employeeType"
+      <Container className="mt-4">
+        <Form>
+          <Form.Group controlId="employeeType">
+            <Form.Label>Employee Type</Form.Label>
+            <Form.Control
+              as="select"
               name="employeeType"
               value={employeeType}
               onChange={this.handleChange}
@@ -102,11 +103,11 @@ class EmployeeSearchWrapper extends Component {
               <option value="PartTime">Part Time</option>
               <option value="Contract">Contract</option>
               <option value="Seasonal">Seasonal</option>
-            </select>
-          </div>
-        </form>
+            </Form.Control>
+          </Form.Group>
+        </Form>
         <EmployeeTable employees={results} />
-      </div>
+      </Container>
     );
   }
 }

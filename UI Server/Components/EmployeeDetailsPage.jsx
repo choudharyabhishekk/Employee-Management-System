@@ -1,6 +1,7 @@
 // EmployeeDetailsPage.jsx
 import React, { Component } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { Card, Container } from "react-bootstrap";
 
 function EmployeeDetailsPage() {
   const navigate = useNavigate();
@@ -73,18 +74,37 @@ class EmployeePage extends Component {
     }
 
     return (
-      <div className="emp-details">
-        <h2>Employee Details</h2>
-        <p>
-          Name: {employee.firstName} {employee.lastName}
-        </p>
-        <p>Age: {employee.age}</p>
-        <p>Title: {employee.title}</p>
-        <p>Department: {employee.department}</p>
-        <p>Joining Date: {employee.dateOfJoining}</p>
-        <p>Employee Type: {employee.employeeType}</p>
-        <p>Status: {employee.currentStatus}</p>
-      </div>
+      <Container className="mt-4">
+        <Card>
+          <Card.Header>
+            <h2>Employee Details</h2>
+          </Card.Header>
+          <Card.Body>
+            <Card.Text>
+              <strong>Name:</strong> {employee.firstName} {employee.lastName}
+            </Card.Text>
+            <Card.Text>
+              <strong>Age:</strong> {employee.age}
+            </Card.Text>
+            <Card.Text>
+              <strong>Title:</strong> {employee.title}
+            </Card.Text>
+            <Card.Text>
+              <strong>Department:</strong> {employee.department}
+            </Card.Text>
+            <Card.Text>
+              <strong>Joining Date:</strong> {employee.dateOfJoining}
+            </Card.Text>
+            <Card.Text>
+              <strong>Employee Type:</strong> {employee.employeeType}
+            </Card.Text>
+            <Card.Text>
+              <strong>Status:</strong>{" "}
+              {employee.currentStatus == 1 ? "Active" : "Inactive"}
+            </Card.Text>
+          </Card.Body>
+        </Card>
+      </Container>
     );
   }
 }

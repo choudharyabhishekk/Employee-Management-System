@@ -1,4 +1,5 @@
 import React from "react";
+import { Table } from "react-bootstrap";
 import EmployeeDetails from "./EmployeeDetails.jsx";
 
 class EmployeeTable extends React.Component {
@@ -12,8 +13,8 @@ class EmployeeTable extends React.Component {
     ));
 
     return (
-      <div>
-        <table>
+      <div className="container mt-4">
+        <Table striped bordered hover>
           <thead>
             <tr>
               <th>Name</th>
@@ -27,7 +28,7 @@ class EmployeeTable extends React.Component {
             </tr>
           </thead>
           <tbody>{rows}</tbody>
-        </table>
+        </Table>
       </div>
     );
   }

@@ -1,5 +1,6 @@
 import React from "react";
 
+import { Form, Button, Alert, Container, Card } from "react-bootstrap";
 class EmployeeCreate extends React.Component {
   constructor() {
     super();
@@ -53,7 +54,6 @@ class EmployeeCreate extends React.Component {
       employeeType: form.employeeType.value,
       currentStatus: 1,
     };
-
 
     const errors = this.validateForm(employee);
 
@@ -124,88 +124,93 @@ class EmployeeCreate extends React.Component {
   render() {
     const { errors, successMessage } = this.state;
     return (
-      <div>
-        <h2>Add New Employee</h2>
-        <hr />
-        {successMessage && <p className="success">{successMessage}</p>}
-        <form name="addEmployee" onSubmit={this.handleSubmit}>
-          <label htmlFor="firstName">First Name</label>
-          <input
-            type="text"
-            name="firstName"
-          />
-          {errors.firstName && <p className="error">{errors.firstName}</p>}
+      <Container className="mt-4">
+        <Card>
+          <Card.Header>
+            <h2>Add New Employee </h2>
+          </Card.Header>
+          <Card.Body>
+            {successMessage && (
+              <Alert variant="success">{successMessage}</Alert>
+            )}
+            <Form name="addEmployee" onSubmit={this.handleSubmit}>
+              <Form.Group controlId="firstName">
+                <Form.Label>First Name</Form.Label>
+                <Form.Control type="text" name="firstName" />
+                {errors.firstName && (
+                  <p className="text-danger">{errors.firstName}</p>
+                )}
+              </Form.Group>
 
-          <label htmlFor="lastName">Last Name</label>
-          <input
-            type="text"
-            name="lastName"
-          />
-          {errors.lastName && <p className="error">{errors.lastName}</p>}
+              <Form.Group controlId="lastName">
+                <Form.Label>Last Name</Form.Label>
+                <Form.Control type="text" name="lastName" />
+                {errors.lastName && (
+                  <p className="text-danger">{errors.lastName}</p>
+                )}
+              </Form.Group>
 
-          <label htmlFor="age">Age</label>
-          <input
-            type="number"
-            name="age"
-          />
-          {errors.age && <p className="error">{errors.age}</p>}
+              <Form.Group controlId="age">
+                <Form.Label>Age</Form.Label>
+                <Form.Control type="number" name="age" />
+                {errors.age && <p className="text-danger">{errors.age}</p>}
+              </Form.Group>
 
-          <label htmlFor="dateOfJoining">Date of Joining</label>
-          <input
-            type="date"
-            name="dateOfJoining"
-          />
-          {errors.dateOfJoining && (
-            <p className="error">{errors.dateOfJoining}</p>
-          )}
+              <Form.Group controlId="dateOfJoining">
+                <Form.Label>Date of Joining</Form.Label>
+                <Form.Control type="date" name="dateOfJoining" />
+                {errors.dateOfJoining && (
+                  <p className="text-danger">{errors.dateOfJoining}</p>
+                )}
+              </Form.Group>
 
-          <label htmlFor="title">Title</label>
-          <select
-            className="form-select"
-            id="title"
-            name="title"
-          >
-            <option value="">Select Title</option>
-            <option value="Employee">Employee</option>
-            <option value="Director">Director</option>
-            <option value="Manager">Manager</option>
-            <option value="VP">VP</option>
-          </select>
-          {errors.title && <p className="error">{errors.title}</p>}
+              <Form.Group controlId="title">
+                <Form.Label>Title</Form.Label>
+                <Form.Control as="select" name="title">
+                  <option value="">Select Title</option>
+                  <option value="Employee">Employee</option>
+                  <option value="Director">Director</option>
+                  <option value="Manager">Manager</option>
+                  <option value="VP">VP</option>
+                </Form.Control>
+                {errors.title && <p className="text-danger">{errors.title}</p>}
+              </Form.Group>
 
-          <label htmlFor="department">Department</label>
-          <select
-            className="form-select"
-            id="department"
-            name="department"
-          >
-            <option value="">Select Department</option>
-            <option value="Engineering">Engineering</option>
-            <option value="IT">IT</option>
-            <option value="Marketing">Marketing</option>
-            <option value="HR">HR</option>
-          </select>
-          {errors.department && <p className="error">{errors.department}</p>}
+              <Form.Group controlId="department">
+                <Form.Label>Department</Form.Label>
+                <Form.Control as="select" name="department">
+                  <option value="">Select Department</option>
+                  <option value="Engineering">Engineering</option>
+                  <option value="IT">IT</option>
+                  <option value="Marketing">Marketing</option>
+                  <option value="HR">HR</option>
+                </Form.Control>
+                {errors.department && (
+                  <p className="text-danger">{errors.department}</p>
+                )}
+              </Form.Group>
 
-          <label htmlFor="employeeType">Employee Type</label>
-          <select
-            className="form-select"
-            id="employeeType"
-            name="employeeType"
-          >
-            <option value="">Select Employee Type</option>
-            <option value="FullTime">Full Time</option>
-            <option value="PartTime">Part Time</option>
-            <option value="Contract">Contract</option>
-            <option value="Seasonal">Seasonal</option>
-          </select>
-          {errors.employeeType && (
-            <p className="error">{errors.employeeType}</p>
-          )}
+              <Form.Group controlId="employeeType">
+                <Form.Label>Employee Type</Form.Label>
+                <Form.Control as="select" name="employeeType">
+                  <option value="">Select Employee Type</option>
+                  <option value="FullTime">Full Time</option>
+                  <option value="PartTime">Part Time</option>
+                  <option value="Contract">Contract</option>
+                  <option value="Seasonal">Seasonal</option>
+                </Form.Control>
+                {errors.employeeType && (
+                  <p className="text-danger">{errors.employeeType}</p>
+                )}
+              </Form.Group>
 
-          <input type="submit" value="Add Employee" className="btn" />
-        </form>
-      </div>
+              <Button className="mt-4" variant="primary" type="submit">
+                Add Employee
+              </Button>
+            </Form>
+          </Card.Body>
+        </Card>
+      </Container>
     );
   }
 }
