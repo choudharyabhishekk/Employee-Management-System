@@ -54,9 +54,22 @@ async function addDbEmployee(employee) {
   }
 }
 
-async function searchDbEmployees(_, { employeeType }) {
+async function searchDbEmployees(_, { employeeType, upcomingRetirement }) {
   try {
-    const query = employeeType ? { employeeType } : {};
+    const currentYear = new Date().getFullYear();
+    const retirementAge = 65;
+    const retirementThreshold = 5;
+
+    const query = {};
+
+    if (employeeType) {
+      query.employeeType = employeeType;
+    }
+
+    if (upcomingRetirement) {
+      query.age = { $gte: retirementAge - retirementThreshold };
+    }
+
     const employees = await db.collection("employees").find(query).toArray();
     return employees;
   } catch (error) {
@@ -96,8 +109,11 @@ const resolvers = {
     employee: async (_, { id }) => {
       return await getDbEmployee(id);
     },
-    searchEmployees: async (_, { employeeType }) => {
-      return await searchDbEmployees(null, { employeeType });
+    searchEmployees: async (_, { employeeType, upcomingRetirement }) => {
+      return await searchDbEmployees(null, {
+        employeeType,
+        upcomingRetirement,
+      });
     },
   },
   Mutation: {

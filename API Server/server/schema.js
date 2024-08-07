@@ -30,7 +30,7 @@ const typeDefs = `
 
   type Query {
     employees: [Employee]
-    searchEmployees(employeeType: String): [Employee]
+    searchEmployees(employeeType: String, upcomingRetirement: Boolean): [Employee]
     employee(id: Int!): Employee
   }
 
@@ -40,4 +40,5 @@ const typeDefs = `
     deleteEmployee(id: Int!): Boolean!
   }
 `;
+
 module.exports = { typeDefs };

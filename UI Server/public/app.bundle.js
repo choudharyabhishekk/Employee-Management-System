@@ -1021,7 +1021,7 @@ function _extends() { _extends = Object.assign ? Object.assign.bind() : function
 
 
 
-var searchQuery = "\n  query searchEmployees($employeeType: String) {\n    searchEmployees(employeeType: $employeeType) {\n      id\n      firstName\n      lastName\n      age\n      dateOfJoining\n      title\n      department\n      employeeType\n      currentStatus\n    }\n  }\n";
+var searchQuery = "\n  query searchEmployees($employeeType: String, $upcomingRetirement: Boolean) {\n    searchEmployees(employeeType: $employeeType, upcomingRetirement: $upcomingRetirement) {\n      id\n      firstName\n      lastName\n      age\n      dateOfJoining\n      title\n      department\n      employeeType\n      currentStatus\n    }\n  }\n";
 var EmployeeSearch = function EmployeeSearch(WrappedComponent) {
   return function (props) {
     var navigate = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_2__.useNavigate)();
@@ -1038,19 +1038,28 @@ var EmployeeSearchWrapper = /*#__PURE__*/function (_Component) {
     var _this;
     _classCallCheck(this, EmployeeSearchWrapper);
     _this = _callSuper(this, EmployeeSearchWrapper, [props]);
-    _defineProperty(_this, "handleChange", function (event) {
+    _defineProperty(_this, "handleTypeChange", function (event) {
       var value = event.target.value;
       _this.setState({
-        employeeType: value,
-        initialType: value
+        employeeType: value
       });
-      _this.props.navigate("/search/".concat(value));
-      _this.searchEmployees(value);
+    });
+    _defineProperty(_this, "handleRetirementChange", function (event) {
+      var value = event.target.checked;
+      _this.setState({
+        upcomingRetirement: value
+      });
+    });
+    _defineProperty(_this, "handleSearch", function () {
+      var _this$state = _this.state,
+        employeeType = _this$state.employeeType,
+        upcomingRetirement = _this$state.upcomingRetirement;
+      _this.searchEmployees(employeeType, upcomingRetirement);
     });
     _this.state = {
       results: [],
       employeeType: props.type || "all",
-      initialType: props.type || "all"
+      upcomingRetirement: false
     };
     return _this;
   }
@@ -1058,20 +1067,20 @@ var EmployeeSearchWrapper = /*#__PURE__*/function (_Component) {
   return _createClass(EmployeeSearchWrapper, [{
     key: "componentDidMount",
     value: function componentDidMount() {
-      this.searchEmployees(this.state.initialType);
+      this.searchEmployees(this.state.employeeType, this.state.upcomingRetirement);
     }
   }, {
     key: "componentDidUpdate",
-    value: function componentDidUpdate(prevProps) {
+    value: function componentDidUpdate(prevProps, prevState) {
       var type = this.props.type;
-      if (type !== this.state.initialType) {
-        this.props.navigate("/search/".concat(this.state.initialType));
+      if (type !== this.state.employeeType || prevState.upcomingRetirement !== this.state.upcomingRetirement) {
+        this.searchEmployees(this.state.employeeType, this.state.upcomingRetirement);
       }
     }
   }, {
     key: "searchEmployees",
     value: function () {
-      var _searchEmployees = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(employeeType) {
+      var _searchEmployees = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(employeeType, upcomingRetirement) {
         var url, response, result;
         return _regeneratorRuntime().wrap(function _callee$(_context) {
           while (1) switch (_context.prev = _context.next) {
@@ -1087,7 +1096,8 @@ var EmployeeSearchWrapper = /*#__PURE__*/function (_Component) {
                 body: JSON.stringify({
                   query: searchQuery,
                   variables: {
-                    employeeType: employeeType === "all" ? "" : employeeType
+                    employeeType: employeeType === "all" ? "" : employeeType,
+                    upcomingRetirement: upcomingRetirement
                   }
                 })
               });
@@ -1101,6 +1111,8 @@ var EmployeeSearchWrapper = /*#__PURE__*/function (_Component) {
                 this.setState({
                   results: result.data.searchEmployees
                 });
+              } else {
+                console.error("No data received or error in query execution");
               }
               _context.next = 14;
               break;
@@ -1114,7 +1126,7 @@ var EmployeeSearchWrapper = /*#__PURE__*/function (_Component) {
           }
         }, _callee, this, [[0, 11]]);
       }));
-      function searchEmployees(_x) {
+      function searchEmployees(_x, _x2) {
         return _searchEmployees.apply(this, arguments);
       }
       return searchEmployees;
@@ -1122,9 +1134,10 @@ var EmployeeSearchWrapper = /*#__PURE__*/function (_Component) {
   }, {
     key: "render",
     value: function render() {
-      var _this$state = this.state,
-        results = _this$state.results,
-        employeeType = _this$state.employeeType;
+      var _this$state2 = this.state,
+        results = _this$state2.results,
+        employeeType = _this$state2.employeeType,
+        upcomingRetirement = _this$state2.upcomingRetirement;
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_3__["default"], {
         className: "mt-4"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_4__["default"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_4__["default"].Group, {
@@ -1133,7 +1146,7 @@ var EmployeeSearchWrapper = /*#__PURE__*/function (_Component) {
         as: "select",
         name: "employeeType",
         value: employeeType,
-        onChange: this.handleChange,
+        onChange: this.handleTypeChange,
         className: "form-select"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("option", {
         value: "all"
@@ -1145,7 +1158,18 @@ var EmployeeSearchWrapper = /*#__PURE__*/function (_Component) {
         value: "Contract"
       }, "Contract"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("option", {
         value: "Seasonal"
-      }, "Seasonal")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_EmployeeTable_jsx__WEBPACK_IMPORTED_MODULE_1__["default"], {
+      }, "Seasonal"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_4__["default"].Group, {
+        controlId: "upcomingRetirement"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_4__["default"].Check, {
+        type: "checkbox",
+        label: "Upcoming Retirement",
+        checked: upcomingRetirement,
+        onChange: this.handleRetirementChange
+      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {
+        type: "button",
+        onClick: this.handleSearch,
+        className: "btn btn-primary mt-3"
+      }, "Search")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_EmployeeTable_jsx__WEBPACK_IMPORTED_MODULE_1__["default"], {
         employees: results
       }));
     }
